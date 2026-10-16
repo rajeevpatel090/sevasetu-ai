@@ -7,6 +7,10 @@ Developed by: Netlink Infosolutions Pvt Ltd (2023)
 Maintained in-house since 02/2026.
 """
 
+import sys
+if __name__ == "__main__":
+    sys.modules["app"] = sys.modules["__main__"]
+
 import os
 import io
 import re
@@ -26,7 +30,7 @@ def now_ist():
 import requests
 import psycopg2
 from flask import (Flask, request, session, redirect, url_for, render_template,
-                   flash, send_file, abort)
+                   flash, send_file, abort, jsonify)
 from fpdf import FPDF
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -68,14 +72,11 @@ except Exception:
     pass
 
 
+import db_adapter
+
+
 def get_db():
-    return psycopg2.connect(
-        host=config.get("database", "host"),
-        port=config.get("database", "port"),
-        dbname=config.get("database", "name"),
-        user=config.get("database", "user"),
-        password=config.get("database", "password"),
-    )
+    return db_adapter.get_db(config)
 
 
 def sanitize(value, maxlen=100):
@@ -93,7 +94,7 @@ def hash_password(p):
 def send_sms(mobile, text):
     try:
         requests.post(SMS_GATEWAY_URL + "/api/send",
-                      json={"to": mobile, "text": text}, timeout=5)
+                      json={"to": mobile, "text": text}, timeout=1)
     except Exception as e:
         app.logger.error("sms gateway error: %s" % e)
 
@@ -226,6 +227,53 @@ def index():
 @app.route("/about")
 def about():
     return render_template("about.html")
+
+
+@app.route("/assistant")
+def assistant_ui():
+    return render_template("assistant.html")
+
+
+@app.route("/api/assistant/chat", methods=["POST"])
+def assistant_chat():
+    from mcp_tools import CitizenMCPService
+    svc = CitizenMCPService(db_factory=get_db)
+    body = request.get_json(silent=True) or {}
+    msg = (body.get("message") or "").strip()
+    mobile = session.get("portal_mobile") or session.get("verified_mobile") or "9876541001"
+    
+    dob_match = re.search(r"\b(\d{1,2}/\d{1,2}/\d{4})\b", msg)
+    if "पात्रता" in msg or "eligib" in msg.lower() or dob_match:
+        dob_str = dob_match.group(1) if dob_match else "15/08/1958"
+        res = svc.check_eligibility(dob_str)
+        return jsonify({
+            "reply_en": res["message_en"],
+            "reply_hi": res["message_hi"]
+        })
+    elif "स्थिति" in msg or "status" in msg.lower():
+        res = svc.get_my_application(mobile)
+        return jsonify({
+            "reply_en": res["message_en"],
+            "reply_hi": res["message_hi"]
+        })
+    else:
+        return jsonify({
+            "reply_en": "I can help you check eligibility, draft and submit an application, or check status. Please provide your date of birth or details to proceed.",
+            "reply_hi": "मैं पात्रता जाँचने, नया आवेदन भरने या स्थिति देखने में आपकी मदद कर सकता हूँ। कृपया आगे बढ़ने के लिए अपनी जन्म तिथि या विवरण प्रदान करें।"
+        })
+
+
+@app.route("/eval-dashboard")
+def eval_dashboard():
+    import eval_service
+    eval_data = eval_service.run_all_evaluations(db_factory=get_db)
+    return render_template("eval_dashboard.html", data=eval_data)
+
+
+@app.route("/eval-dashboard/run", methods=["POST"])
+def eval_dashboard_run():
+    return redirect(url_for("eval_dashboard"))
+
 
 
 @app.route("/__gateway/", defaults={"subpath": ""})

@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sewa Setu Sahayak — Evaluation Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --teal: #0F5C5C;
+  --teal-dark: #0A3E3E;
+  --teal-light: #E6F0F0;
+  --saffron: #F59E0B;
+  --saffron-light: #FEF3C7;
+  --bg: #FAFAF7;
+  --card-bg: #FFFFFF;
+  --text: #1F2933;
+  --text-muted: #52606D;
+  --success: #15803D;
+  --success-bg: #DCFCE7;
+  --error: #B91C1C;
+  --error-bg: #FEE2E2;
+  --border: #E4E7EB;
+  --font-family: 'Inter', 'Noto Sans Devanagari', -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg);
+  color: var(--text);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+/* Header & Top Bar */
+.top-bar {
+  background-color: var(--teal);
+  color: #FFFFFF;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: #fff;
+}
+.brand-logo {
+  width: 44px;
+  height: 44px;
+  background: var(--saffron);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--teal-dark);
+  font-size: 22px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+.brand-text h1 { font-size: 20px; font-weight: 700; line-height: 1.2; }
+.brand-text span { font-size: 14px; opacity: 0.85; }
+
+/* Language Toggle */
+.lang-toggle-btn {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #FFFFFF;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 44px;
+}
+.lang-toggle-btn:hover { background: rgba(255,255,255,0.28); }
+
+/* Main Container */
+.container {
+  max-width: 1080px;
+  margin: 32px auto;
+  padding: 0 20px;
+}
+
+/* Hero & Summary Cards */
+.hero {
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 32px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 16px rgba(15, 92, 92, 0.05);
+  margin-bottom: 32px;
+}
+.hero h2 {
+  font-size: 28px;
+  color: var(--teal);
+  margin-bottom: 8px;
+}
+.hero p { color: var(--text-muted); font-size: 18px; margin-bottom: 24px; }
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.stat-box {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+}
+.stat-value {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--teal);
+}
+.stat-value.success { color: var(--success); }
+.stat-label { font-size: 15px; color: var(--text-muted); font-weight: 500; }
+
+/* Action Button */
+.btn-primary {
+  min-height: 52px;
+  background-color: var(--teal);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 16px;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 12px 28px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.btn-primary:hover { background-color: var(--teal-dark); }
+.btn-primary:active { transform: scale(0.98); }
+
+.btn-secondary {
+  min-height: 52px;
+  background-color: var(--saffron-light);
+  color: #854D0E;
+  border: 1px solid var(--saffron);
+  border-radius: 16px;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 12px 28px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Persona Eval Cards */
+.persona-card {
+  background: var(--card-bg);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  padding: 28px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+.persona-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.badge-pass { background: var(--success-bg); color: var(--success); }
+.badge-fail { background: var(--error-bg); color: var(--error); }
+
+.detail-row {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+.detail-label {
+  font-weight: 600;
+  color: var(--teal);
+}
+
+/* Transcript Box */
+.transcript-box {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 16px;
+  font-size: 15px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+.msg-bubble {
+  padding: 8px 12px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+.msg-user { background: #E2E8F0; color: #1E293B; }
+.msg-assistant { background: var(--teal-light); color: var(--teal-dark); }
+.msg-tool { background: #FEF3C7; color: #92400E; font-family: monospace; font-size: 13px; }
+
+/* Navigation Bar */
+.nav-links {
+  display: flex;
+  gap: 14px;
+  margin-top: 24px;
+}
+</style>
+</head>
+<body>
+
+<header class="top-bar">
+  <a href="/" class="brand">
+    <div class="brand-logo">SS</div>
+    <div class="brand-text">
+      <h1 data-en="Sewa Setu Sahayak" data-hi="सेवा सेतु सहायक">Sewa Setu Sahayak</h1>
+      <span data-en="Evaluation & Verification Dashboard" data-hi="मूल्यांकन एवं सत्यापन डैशबोर्ड">Evaluation &amp; Verification Dashboard</span>
+    </div>
+  </a>
+  <div style="display:flex; align-items:center; gap:12px;">
+    <a href="/assistant" class="btn-primary" style="min-height:44px; padding:6px 18px; font-size:15px;" data-en="Try Assistant" data-hi="सहायक आज़माएं">Try Assistant</a>
+    <button id="langToggle" class="lang-toggle-btn" onclick="toggleLanguage()">हिं | EN</button>
+  </div>
+</header>
+
+<main class="container">
+  <section class="hero">
+    <h2 data-en="AI Citizen Personas & Evaluation Suite" data-hi="एआई नागरिक प्रोफाइल एवं मूल्यांकन परीक्षण">AI Citizen Personas &amp; Evaluation Suite</h2>
+    <p data-en="Testing real conversations against Citizen and Officer MCP servers over Streamable HTTP. Every scenario verifies statutory rules, safety boundaries, and portal database state."
+       data-hi="स्ट्रीमेबल HTTP पर सिटीजन और ऑफिसर MCP सर्वर के विरुद्ध वास्तविक संवाद परीक्षण। प्रत्येक परिदृश्य वैधानिक नियमों, सुरक्षा सीमाओं और डेटाबेस स्थिति की पुष्टि करता है।">
+      Testing real conversations against Citizen and Officer MCP servers over Streamable HTTP. Every scenario verifies statutory rules, safety boundaries, and portal database state.
+    </p>
+
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-value">{{ data.total }}</div>
+        <div class="stat-label" data-en="Total Scenarios" data-hi="कुल परिदृश्य">Total Scenarios</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value success">{{ data.passed }}</div>
+        <div class="stat-label" data-en="Passed" data-hi="उत्तीर्ण (Passed)">Passed</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value success">{{ data.pass_rate }}</div>
+        <div class="stat-label" data-en="Pass Rate" data-hi="उत्तीर्ण प्रतिशत">Pass Rate</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" style="font-size:20px; padding-top:10px;">{{ data.timestamp }}</div>
+        <div class="stat-label" data-en="Last Executed" data-hi="अंतिम परीक्षण समय">Last Executed</div>
+      </div>
+    </div>
+
+    <form method="POST" action="/eval-dashboard/run" style="display:inline;">
+      <button type="submit" class="btn-primary">
+        <span data-en="⚡ Re-run All Evals Against Live DB" data-hi="⚡ लाइव डेटाबेस पर सभी मूल्यांकन पुनः चलाएं">⚡ Re-run All Evals Against Live DB</span>
+      </button>
+    </form>
+  </section>
+
+  <h3 style="font-size:24px; color:var(--teal); margin-bottom:18px;" data-en="Citizen Personas & Verification Traces" data-hi="नागरिक प्रोफाइल एवं सत्यापन विवरण">Citizen Personas &amp; Verification Traces</h3>
+
+  {% for r in data.results %}
+  <article class="persona-card">
+    <div class="persona-header">
+      <div>
+        <h4 style="font-size:22px; color:var(--teal); font-weight:700;">
+          <span class="lang-en">{{ r.persona.name_en }}</span>
+          <span class="lang-hi" style="display:none;">{{ r.persona.name_hi }}</span>
+        </h4>
+        <div style="font-size:15px; color:var(--text-muted);">
+          Age: {{ r.persona.age }} &middot; Block: {{ r.persona.block }} &middot; Village: {{ r.persona.village }}
+        </div>
+      </div>
+      <div>
+        {% if r.passed %}
+          <span class="badge badge-pass" data-en="✓ VERIFIED PASSED" data-hi="✓ सत्यापित - सफल">✓ VERIFIED PASSED</span>
+        {% else %}
+          <span class="badge badge-fail" data-en="✗ FAILED" data-hi="✗ असफल">✗ FAILED</span>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="detail-row">
+      <span class="detail-label" data-en="Background & Persona: " data-hi="पृष्ठभूमि एवं स्वरूप: ">Background &amp; Persona: </span>
+      <span class="lang-en">{{ r.persona.persona_summary_en }}</span>
+      <span class="lang-hi" style="display:none;">{{ r.persona.persona_summary_hi }}</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="detail-label" data-en="Conversation Goal: " data-hi="संवाद लक्ष्य: ">Conversation Goal: </span>
+      <span class="lang-en">{{ r.persona.goal_en }}</span>
+      <span class="lang-hi" style="display:none;">{{ r.persona.goal_hi }}</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="detail-label" data-en="Database Assertion: " data-hi="डेटाबेस सत्यापन नियम: ">Database Assertion: </span>
+      <strong>{{ r.assertion }}</strong>
+    </div>
+
+    <div class="detail-row" style="color:var(--success); font-weight:600;">
+      <span data-en="Database Verified State: " data-hi="सत्यापित डेटाबेस स्थिति: ">Database Verified State: </span>
+      <code>{{ r.db_record }}</code>
+    </div>
+
+    <details style="margin-top:14px; cursor:pointer;">
+      <summary style="font-weight:600; color:var(--teal);" data-en="View Conversation & Tool Trace" data-hi="बातचीत और टूल विवरण देखें">View Conversation &amp; Tool Trace</summary>
+      <div class="transcript-box">
+        {% for m in r.conversation %}
+          {% if m.role == 'user' %}
+            <div class="msg-bubble msg-user"><strong>Citizen:</strong> {{ m.text }}</div>
+          {% elif m.role == 'assistant' %}
+            <div class="msg-bubble msg-assistant"><strong>Assistant:</strong> {{ m.text }}</div>
+          {% elif m.role == 'tool_call' %}
+            <div class="msg-bubble msg-tool"><strong>MCP Call:</strong> {{ m.tool }}({{ m.args }})</div>
+          {% elif m.role == 'tool_result' %}
+            <div class="msg-bubble msg-tool"><strong>MCP Output:</strong> {{ m.data }}</div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </details>
+  </article>
+  {% endfor %}
+</main>
+
+<script>
+// Language Toggle Logic (Remembered in localStorage & URL ?lang=hi|en)
+function setLanguage(lang) {
+  localStorage.setItem('sewasetu_lang', lang);
+  document.querySelectorAll('[data-en]').forEach(el => {
+    el.textContent = lang === 'hi' ? el.getAttribute('data-hi') : el.getAttribute('data-en');
+  });
+  document.querySelectorAll('.lang-en').forEach(el => el.style.display = lang === 'hi' ? 'none' : 'inline');
+  document.querySelectorAll('.lang-hi').forEach(el => el.style.display = lang === 'hi' ? 'inline' : 'none');
+  document.getElementById('langToggle').textContent = lang === 'hi' ? 'EN | हिं' : 'हिं | EN';
+}
+
+function toggleLanguage() {
+  const current = localStorage.getItem('sewasetu_lang') || 'en';
+  const next = current === 'en' ? 'hi' : 'en';
+  setLanguage(next);
+}
+
+// Initial load check
+const urlParams = new URLSearchParams(window.location.search);
+const langParam = urlParams.get('lang');
+const initialLang = langParam || localStorage.getItem('sewasetu_lang') || 'en';
+setLanguage(initialLang);
+</script>
+
+</body>
+</html>

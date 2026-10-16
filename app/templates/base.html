@@ -2,45 +2,245 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Sewa Setu - Old Age Pension Portal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sewa Setu Sahayak — Old Age Pension Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-body{font-family:Arial,Helvetica,sans-serif;margin:0;background:#f0f2f5;color:#222}
-.header{background:#0b3d6e;color:#fff;padding:14px 28px}
-.header h1{margin:0;font-size:22px}
-.header .sub{font-size:13px;color:#cfe0f3}
-.band{background:#f7931e;height:5px}
-.container{max-width:860px;margin:24px auto;background:#fff;padding:28px;
-border:1px solid #d7dbe0;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.btn{background:#0b3d6e;color:#fff;border:none;padding:10px 22px;font-size:15px;cursor:pointer}
-.btn:hover{background:#0d4a85}
-label{display:block;margin:12px 0 4px;font-weight:bold;font-size:14px}
-input[type=text],input[type=password],select{width:100%;max-width:420px;padding:8px;
-border:1px solid #aab;font-size:14px}
-.flash{background:#fdecea;border:1px solid #e57373;color:#a33;padding:10px 14px;margin:14px 0}
-.note{font-size:13px;color:#555}
-.footer{max-width:860px;margin:10px auto 40px;font-size:12px;color:#666;text-align:center}
-.footer a{color:#0b3d6e;margin:0 8px}
-table.tbl{border-collapse:collapse;width:100%}
-table.tbl td,table.tbl th{border:1px solid #ccd;padding:7px 10px;font-size:14px;text-align:left}
-.steps{font-size:13px;color:#777;margin-bottom:18px}
-.steps b{color:#0b3d6e}
+:root {
+  --teal: #0F5C5C;
+  --teal-dark: #0A3E3E;
+  --teal-light: #E6F0F0;
+  --saffron: #F59E0B;
+  --saffron-light: #FEF3C7;
+  --bg: #FAFAF7;
+  --card-bg: #FFFFFF;
+  --text: #1F2933;
+  --text-muted: #52606D;
+  --success: #15803D;
+  --success-bg: #DCFCE7;
+  --error: #B91C1C;
+  --error-bg: #FEE2E2;
+  --border: #E4E7EB;
+  --font-family: 'Inter', 'Noto Sans Devanagari', -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg);
+  color: var(--text);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+/* Header & Top Bar */
+.top-bar {
+  background-color: var(--teal);
+  color: #FFFFFF;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: #fff;
+}
+.brand-logo {
+  width: 44px;
+  height: 44px;
+  background: var(--saffron);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--teal-dark);
+  font-size: 22px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+.brand-text h1 { font-size: 20px; font-weight: 700; line-height: 1.2; }
+.brand-text span { font-size: 14px; opacity: 0.85; }
+
+.top-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.top-link {
+  color: #FFFFFF;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+.top-link:hover { background: rgba(255,255,255,0.15); }
+
+/* Language Toggle */
+.lang-toggle-btn {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #FFFFFF;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 44px;
+}
+.lang-toggle-btn:hover { background: rgba(255,255,255,0.28); }
+
+.saffron-band {
+  background: var(--saffron);
+  height: 4px;
+}
+
+.container {
+  max-width: 900px;
+  margin: 32px auto;
+  background: var(--card-bg);
+  padding: 32px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 16px rgba(15, 92, 92, 0.05);
+}
+
+.btn {
+  min-height: 52px;
+  background-color: var(--teal);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 16px;
+  padding: 12px 28px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+.btn:hover { background-color: var(--teal-dark); }
+
+label {
+  display: block;
+  margin: 16px 0 6px;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--teal);
+}
+input[type=text], input[type=password], select {
+  width: 100%;
+  max-width: 480px;
+  min-height: 48px;
+  padding: 10px 16px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+}
+input[type=text]:focus, input[type=password]:focus, select:focus {
+  border-color: var(--teal);
+}
+
+.flash {
+  background: var(--error-bg);
+  border: 1px solid var(--error);
+  color: var(--error);
+  padding: 12px 18px;
+  border-radius: 12px;
+  margin: 16px 0;
+  font-weight: 500;
+}
+.note { font-size: 14px; color: var(--text-muted); }
+.footer {
+  max-width: 900px;
+  margin: 20px auto 40px;
+  font-size: 15px;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.8;
+}
+.footer a { color: var(--teal); margin: 0 10px; text-decoration: none; font-weight: 500; }
+.footer a:hover { text-decoration: underline; }
+
+table.tbl { border-collapse: collapse; width: 100%; margin-top: 16px; }
+table.tbl td, table.tbl th { border: 1px solid var(--border); padding: 12px 16px; font-size: 16px; text-align: left; }
+table.tbl th { background: var(--bg); color: var(--teal); font-weight: 600; }
+
+.steps { font-size: 16px; color: var(--text-muted); margin-bottom: 24px; }
+.steps b { color: var(--teal); }
 </style>
 </head>
 <body>
-<div class="header">
-  <h1>Sewa Setu &mdash; Old Age Pension Portal</h1>
-  <div class="sub">Department of Social Welfare &middot; Government of Purvanchal</div>
-</div>
-<div class="band"></div>
-<div class="container">
+
+<header class="top-bar">
+  <a href="/" class="brand">
+    <div class="brand-logo">SS</div>
+    <div class="brand-text">
+      <h1 data-en="Sewa Setu Sahayak" data-hi="सेवा सेतु सहायक">Sewa Setu Sahayak</h1>
+      <span data-en="Old Age Pension Portal &middot; Purvanchal" data-hi="वृद्धावस्था पेंशन पोर्टल &middot; पूर्वांचल">Old Age Pension Portal &middot; Purvanchal</span>
+    </div>
+  </a>
+
+  <div class="top-nav">
+    <a href="/assistant" class="top-link" data-en="AI Assistant" data-hi="एआई सहायक">AI Assistant</a>
+    <a href="/eval-dashboard" class="top-link" data-en="Eval Dashboard" data-hi="मूल्यांकन डैशबोर्ड">Eval Dashboard</a>
+    <button id="langToggle" class="lang-toggle-btn" onclick="toggleLanguage()">हिं | EN</button>
+  </div>
+</header>
+<div class="saffron-band"></div>
+
+<main class="container">
 {% with messages = get_flashed_messages() %}
   {% for m in messages %}<div class="flash">{{ m }}</div>{% endfor %}
 {% endwith %}
 {% block content %}{% endblock %}
-</div>
-<div class="footer">
-  <a href="/">Home</a> | <a href="/about">About the Scheme</a> | <a href="/status">Application Status</a><br>
+</main>
+
+<footer class="footer">
+  <a href="/" data-en="Home" data-hi="होम">Home</a> | 
+  <a href="/about" data-en="About Scheme" data-hi="योजना परिचय">About Scheme</a> | 
+  <a href="/status" data-en="Application Status" data-hi="आवेदन स्थिति">Application Status</a> | 
+  <a href="/assistant" data-en="Sahayak Assistant" data-hi="सहायक एआई">Sahayak Assistant</a> | 
+  <a href="/eval-dashboard" data-en="Eval Dashboard" data-hi="मूल्यांकन डैशबोर्ड">Eval Dashboard</a><br>
   Department of Social Welfare, Government of Purvanchal.
-</div>
+</footer>
+
+<script>
+function setLanguage(lang) {
+  localStorage.setItem('sewasetu_lang', lang);
+  document.querySelectorAll('[data-en]').forEach(el => {
+    el.textContent = lang === 'hi' ? el.getAttribute('data-hi') : el.getAttribute('data-en');
+  });
+  const toggle = document.getElementById('langToggle');
+  if (toggle) {
+    toggle.textContent = lang === 'hi' ? 'EN | हिं' : 'हिं | EN';
+  }
+}
+
+function toggleLanguage() {
+  const current = localStorage.getItem('sewasetu_lang') || 'en';
+  setLanguage(current === 'en' ? 'hi' : 'en');
+}
+
+const urlParams = new URLSearchParams(window.location.search);
+setLanguage(urlParams.get('lang') || localStorage.getItem('sewasetu_lang') || 'en');
+</script>
 </body>
 </html>
